@@ -5,19 +5,21 @@ import net.lol365.argorithms.util.RandomUtil;
 import java.util.Arrays;
 
 /**
- * 二分查找
- * 1.前提是有序列表
- * 2.每次计算指定范围内的中间值，进行比较。
+ * 插值查找
+ *  相当于是二分查找的改进版本
  */
-public class BinarySearch {
+public class InterpolationSearch {
 
     public static int search(int[] arr, int target) {
 
         int low = 0;
         int high = arr.length - 1;
-        int mid = (low + high) / 2;
 
-        while (low <= high) {
+        while (low <= high && arr[low] <= target && arr[high] >= target) {
+            // 计算区间比例，这样更容易确定要找的值靠近哪个边界
+            float fx = 1.0f * (target - arr[low]) / (arr[high] - arr[low]);
+            // 0<fx<1.0
+            int mid = (int) (low + fx * (high - low));
             if (arr[mid] == target) {
                 return mid;
             } else if (arr[mid] > target) {
@@ -25,7 +27,6 @@ public class BinarySearch {
             } else {
                 low = mid + 1;
             }
-            mid = (low + high) / 2;
         }
 
         return -1;
@@ -35,8 +36,8 @@ public class BinarySearch {
         int[] raw = RandomUtil.randomIntArray(20, 20);
         System.out.println("raw => ");
         RandomUtil.displayIntArray(raw);
-        System.out.println();
         Arrays.sort(raw);
+        System.out.println();
         System.out.println("sorted => ");
         RandomUtil.displayIntArray(raw);
         System.out.println();
@@ -47,4 +48,5 @@ public class BinarySearch {
         System.out.println(index);
 
     }
+
 }
